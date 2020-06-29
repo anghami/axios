@@ -65,7 +65,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var utils = __webpack_require__(2);
 	var bind = __webpack_require__(3);
 	var Axios = __webpack_require__(5);
-	var mergeConfig = __webpack_require__(24);
+	var mergeConfig = __webpack_require__(23);
 	var defaults = __webpack_require__(11);
 	
 	/**
@@ -99,15 +99,15 @@ return /******/ (function(modules) { // webpackBootstrap
 	};
 	
 	// Expose Cancel & CancelToken
-	axios.Cancel = __webpack_require__(25);
-	axios.CancelToken = __webpack_require__(26);
+	axios.Cancel = __webpack_require__(24);
+	axios.CancelToken = __webpack_require__(25);
 	axios.isCancel = __webpack_require__(10);
 	
 	// Expose all/spread
 	axios.all = function all(promises) {
 	  return Promise.all(promises);
 	};
-	axios.spread = __webpack_require__(27);
+	axios.spread = __webpack_require__(26);
 	
 	module.exports = axios;
 	
@@ -499,7 +499,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	var buildURL = __webpack_require__(6);
 	var InterceptorManager = __webpack_require__(7);
 	var dispatchRequest = __webpack_require__(8);
-	var mergeConfig = __webpack_require__(24);
+	var mergeConfig = __webpack_require__(23);
 	
 	/**
 	 * Create a new instance of Axios
@@ -1076,7 +1076,7 @@ return /******/ (function(modules) { // webpackBootstrap
 	    // This is only done if running in a standard browser environment.
 	    // Specifically not if we're in a web worker, or react-native.
 	    if (utils.isStandardBrowserEnv()) {
-	      var cookies = __webpack_require__(23);
+	      var cookies = __webpack_require__(22);
 	
 	      // Add xsrf header
 	      var xsrfValue = (config.withCredentials || isURLSameOrigin(fullPath)) && config.xsrfCookieName ?
@@ -1388,7 +1388,6 @@ return /******/ (function(modules) { // webpackBootstrap
 	'use strict';
 	
 	var utils = __webpack_require__(2);
-	var isValidXss = __webpack_require__(22);
 	
 	module.exports = (
 	  utils.isStandardBrowserEnv() ?
@@ -1412,12 +1411,26 @@ return /******/ (function(modules) { // webpackBootstrap
 	        if (msie) {
 	        // IE needs attribute set twice to normalize properties
 	          urlParsingNode.setAttribute('href', href);
-	          href = urlParsingNode.href;
+	          if (urlParsingNode) {
+	            href = urlParsingNode.href;
+	          }
 	        }
 	
 	        urlParsingNode.setAttribute('href', href);
 	
-	        // urlParsingNode provides the UrlUtils interface - http://url.spec.whatwg.org/#urlutils
+	        // To fix the build error when building Angular 9
+	        if (!urlParsingNode) {
+	          return {
+	            href: '',
+	            protocol: '',
+	            host: '',
+	            search: '',
+	            hash: '',
+	            hostname: '',
+	            port: '',
+	            pathname: ''
+	          };
+	        }
 	        return {
 	          href: urlParsingNode.href,
 	          protocol: urlParsingNode.protocol ? urlParsingNode.protocol.replace(/:$/, '') : '',
@@ -1458,18 +1471,6 @@ return /******/ (function(modules) { // webpackBootstrap
 
 /***/ }),
 /* 22 */
-/***/ (function(module, exports) {
-
-	'use strict';
-	
-	module.exports = function isValidXss(requestURL) {
-	  var xssRegex = /(\b)(on\S+)(\s*)=|javascript|(<\s*)(\/*)script/gi;
-	  return xssRegex.test(requestURL);
-	};
-
-
-/***/ }),
-/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1536,7 +1537,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 24 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -1615,7 +1616,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 25 */
+/* 24 */
 /***/ (function(module, exports) {
 
 	'use strict';
@@ -1640,12 +1641,12 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 26 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var Cancel = __webpack_require__(25);
+	var Cancel = __webpack_require__(24);
 	
 	/**
 	 * A `CancelToken` is an object that can be used to request cancellation of an operation.
@@ -1703,7 +1704,7 @@ return /******/ (function(modules) { // webpackBootstrap
 
 
 /***/ }),
-/* 27 */
+/* 26 */
 /***/ (function(module, exports) {
 
 	'use strict';
